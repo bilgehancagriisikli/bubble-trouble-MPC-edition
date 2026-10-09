@@ -5,7 +5,8 @@ Flash oyunu *Bubble Trouble* (SWF v5, ActionScript 1) üzerine mod çalışması
 ## Yapı
 - `original/bubble_trouble.swf` — dokunulmamış orijinal oyun
 - `src/scripts/` — JPEXS FFDec ile çıkarılmış ActionScript kodları (modlar burada yapılır)
-- `tools/build.sh` — `src/` içindeki scriptleri orijinal SWF'e gömüp `build/bubble_trouble_mpc.swf` üretir
+- `tools/build.sh` — seviye seçme ekranını ekler, `src/` içindeki scriptleri orijinal SWF'e gömüp `build/bubble_trouble_mpc.swf` üretir
+- `tools/inject_levelselect.py` — seviye seçme ekranını (şekiller, butonlar, yazılar) SWF'e yeni karakterler olarak ekler
 - `tools/decompile.sh` — scriptleri orijinalden yeniden çıkarır
 - `tools/setup.sh` — FFDec'i indirir (Java gerekir)
 
@@ -16,6 +17,20 @@ Flash oyunu *Bubble Trouble* (SWF v5, ActionScript 1) üzerine mod çalışması
 
 Değişken isimleri Hırvatça: `lives` = can, `brzinaigraca` = oyuncu hızı, `gravitacija` = yerçekimi,
 `pucanjvrsta` = silah türleri, `vrijemestaze` = bölüm süresi, `loptica` = top, `razina` = seviye.
+
+## Modlar
+- **Sonsuz can** — can hiç azalmaz (`// MOD: sonsuz can` satırları).
+- **Seviye seçme ekranı** — 1 PLAYER / 2 PLAYERS'a basınca 17 seviyeden biri seçilir.
+  - Ekran: `tools/inject_levelselect.py` ("izbornik" sprite'ı)
+  - Mantık: `src/scripts/frame_1/DoAction.as` (`izborrazine`, `izbor`)
+  - Menü butonları: `src/scripts/DefineButton2_446`, `DefineButton2_448`
+  - Seçilen seviyeye atlama: `src/scripts/frame_258/DoAction.as`
+
+## Notlar
+- Oyun SWF v5. Sürüm 6'ya çıkarmak oyunu bozar: v5'te fonksiyon içindeki değişkenler
+  (`_X`, `kolkodas` vb.) fonksiyonu çağıran klibe aittir, v6'da tanımlandığı yere.
+  Bu yüzden v6 API'leri (çizim, createEmptyMovieClip, onRelease) kullanılamaz;
+  yeni görsel öğeler SWF'e etiket olarak eklenir.
 
 ## Derleme
 ```bash

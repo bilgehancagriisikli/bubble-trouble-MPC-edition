@@ -57,7 +57,6 @@ movieclip.prototype.izborrazine = function()
 movieclip.prototype.izbor = function(n)
 {
    _root.ozvuci("option");
-   _root.izbornik.removeMovieClip();
    if(n > 0)
    {
       _root.secilenrazina = n;
@@ -67,4 +66,6 @@ movieclip.prototype.izbor = function(n)
    {
       _root.meniji1 = "ok";
    }
+   // en sonda: buton bu klibin içinde, silindikten sonra kod çalışmaya devam etmeyebilir
+   _root.izbornik.removeMovieClip();
 };
