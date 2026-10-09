@@ -12,7 +12,7 @@ movieclip.prototype.smrt = function(moja)
    stopAllSounds();
    ozvuci("death");
    _root.somazgoon = 0;
-   _root["lives" + moja]--;
+   // MOD: sonsuz can - _root["lives" + moja]--;
    if(_root["lives" + moja] < 1)
    {
       _root.dorazina[moja] = _root.razina;

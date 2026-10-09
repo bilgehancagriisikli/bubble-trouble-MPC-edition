@@ -1,6 +1,6 @@
 movieclip.prototype.smrtodstropa = function(acija)
 {
-   _root["lives" + acija]--;
+   // MOD: sonsuz can - _root["lives" + acija]--;
    maknisveloptice();
    _root.brojloptica[0] = 1;
    _root.somazgoon = 0;
@@ -37,8 +37,8 @@ movieclip.prototype.spustistrop = function(strop, ubrzanje)
 movieclip.prototype.otislovrijeme = function()
 {
    _root.somazgoon = 0;
-   _root.lives1--;
-   _root.lives2--;
+   // MOD: sonsuz can - _root.lives1--;
+   // MOD: sonsuz can - _root.lives2--;
    _root.cvrsto2.attachMovie("countdowntime","canttime",15);
 };
 movieclip.prototype.inicijaliziraj_stazu = function()
