@@ -331,4 +331,10 @@ movieclip.prototype.defaultstaza = function()
    }
    _root.levela = 1;
    _root.itemz = new Array("x","x","x","x","x","x","x","x","x","x","x");
+   // MOD: 17. bölümün değişkenlerini sıfırla. Orijinalde 17'den sonra bölüm yoktu; artık başka
+   // bölüme geçilebildiği için tajmaut > 500 kalınca vurulan her top 0. bölmeye taşınıyordu
+   // (kapılar/bölüm sonu bozuluyor, toplar duvarların ötesine kaçıp "kayboluyordu").
+   // 17. bölüm kendi kurulumunda (frame_397) tajmaut'u bundan sonra tekrar 12000 yapıyor.
+   _root.tajmaut = 0;
+   _root.kaos = 0;
 };
