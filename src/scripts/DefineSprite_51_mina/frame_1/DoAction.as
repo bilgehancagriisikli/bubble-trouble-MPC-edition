@@ -1,0 +1,2 @@
+ozvuci("majnn");
+stop();

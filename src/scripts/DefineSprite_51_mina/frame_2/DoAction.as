@@ -1,0 +1,2 @@
+starttime = getTimer();
+pop.stop();

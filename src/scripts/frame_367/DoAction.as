@@ -1,0 +1,12 @@
+mojevrijemeje(130,80);
+pocistisve();
+defaultstaza();
+_root.ljevirub = new Array("184.7","7.3","549.3");
+_root.desnirub = new Array("509.3","144.7","694.1");
+_root.ljevix = Number(_root.ljevirub[0]) + _root.sirinaigraca / 2;
+_root.desnix = Number(_root.desnirub[0]) - _root.sirinaigraca / 2;
+_root.levela = 3;
+_root.vrat = 0;
+_root.bar = 0;
+_root.itemz = new Array("x","x","x","x","x","x","x","x","o","x","x");
+stop();

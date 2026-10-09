@@ -1,0 +1,2 @@
+ozvuci("huk");
+stop();
