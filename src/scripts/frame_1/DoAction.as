@@ -48,7 +48,7 @@ movieclip.prototype.ozvuci = function(zound)
    }
 };
 // MOD: seviye seçme ekranı
-// Ekranın kendisi (butonlar, yazılar) tools/inject_levelselect.py ile SWF'e
+// Ekranın kendisi (butonlar, yazılar) tools/inject_ui.py ile SWF'e
 // "izbornik" adlı sprite olarak eklenir; butonlar izbor(N) çağırır, geri butonu izbor(0).
 movieclip.prototype.izborrazine = function()
 {

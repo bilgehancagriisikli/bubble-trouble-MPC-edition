@@ -6,7 +6,7 @@ Flash oyunu *Bubble Trouble* (SWF v5, ActionScript 1) üzerine mod çalışması
 - `original/bubble_trouble.swf` — dokunulmamış orijinal oyun
 - `src/scripts/` — JPEXS FFDec ile çıkarılmış ActionScript kodları (modlar burada yapılır)
 - `tools/build.sh` — seviye seçme ekranını ekler, `src/` içindeki scriptleri orijinal SWF'e gömüp `build/bubble_trouble_mpc.swf` üretir
-- `tools/inject_levelselect.py` — seviye seçme ekranını (şekiller, butonlar, yazılar) SWF'e yeni karakterler olarak ekler
+- `tools/inject_ui.py` — seviye seçme ekranını ve "MPC EDITION" yazısını SWF'e yeni karakterler olarak ekler
 - `tools/decompile.sh` — scriptleri orijinalden yeniden çıkarır
 - `tools/setup.sh` — FFDec'i indirir (Java gerekir)
 
@@ -19,6 +19,7 @@ Değişken isimleri Hırvatça: `lives` = can, `brzinaigraca` = oyuncu hızı, `
 `pucanjvrsta` = silah türleri, `vrijemestaze` = bölüm süresi, `loptica` = top, `razina` = seviye.
 
 ## Modlar
+- **"MPC EDITION" yazısı** — ana menüde logonun altında (`tools/inject_ui.py`, logo sprite'ı 433'e eklenir).
 - **Sonsuz can** — can hiç azalmaz (`// MOD: sonsuz can` satırları).
 - **Sonsuz süre** — süre çubuğu hep dolu kalır (`staza_tece`, `frame_254/DoAction_3.as`).
 - **Tavanı durdurma** — inen tavanlı bölümde (6. seviye) **S** tuşu tavanı durdurur / tekrar başlatır (`spustistrop`).
@@ -26,7 +27,7 @@ Değişken isimleri Hırvatça: `lives` = can, `brzinaigraca` = oyuncu hızı, `
 - **Toplar oyuncunun içinden geçer** — top oyuncuya değince öldürmez, yoluna devam eder
   (`bauns`, `frame_254/DoAction_6.as`).
 - **Seviye seçme ekranı** — 1 PLAYER / 2 PLAYERS'a basınca 17 seviyeden biri seçilir.
-  - Ekran: `tools/inject_levelselect.py` ("izbornik" sprite'ı)
+  - Ekran: `tools/inject_ui.py` ("izbornik" sprite'ı)
   - Mantık: `src/scripts/frame_1/DoAction.as` (`izborrazine`, `izbor`)
   - Menü butonları: `src/scripts/DefineButton2_446`, `DefineButton2_448`
   - Seçilen seviyeye atlama: `src/scripts/frame_258/DoAction.as`

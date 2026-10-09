@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Seviye seçme ekranını SWF'e yeni karakterler olarak ekler (SWF v5 uyumlu).
+"""Arayüz eklemeleri: seviye seçme ekranı + logonun altındaki "MPC EDITION" yazısı (SWF v5 uyumlu).
 
 SWF v5'te çizim API'si / createEmptyMovieClip / onRelease yok, bu yüzden ekran
 çalışma anında çizilemiyor. Bunun yerine bu betik gerçek Flash nesneleri üretir:
@@ -10,7 +10,10 @@ ActionScript'ten _root.attachMovie("izbornik", ...) ile açılabilir.
 Butonlar sadece izbor(N) fonksiyonunu çağırır (geri butonu: izbor(0));
 asıl mantık src/scripts/frame_1/DoAction.as içindedir.
 
-Kullanım: inject_levelselect.py <girdi.swf> <çıktı.swf>
+"MPC EDITION" rozeti, ana menüdeki "BUBBLE TROUBLE" logosunun sprite'ına (433)
+çocuk olarak eklenir; böylece logo nerede/ne zaman görünüyorsa o da görünür.
+
+Kullanım: inject_ui.py <girdi.swf> <çıktı.swf>
 """
 import struct
 import sys
@@ -23,6 +26,9 @@ VERDANA_SRC = 699  # "Verdana": glifsiz, sistem fontu olarak çizilir
 # Bu yüzden kendi kopyalarımızı en başta tanımlıyoruz.
 FONT_NUMBERS = FIRST_ID + 900  # Scythe'ın kopyası
 FONT_DEVICE = FIRST_ID + 901  # Verdana'nın kopyası
+FONT_DEVICE_BOLD = FIRST_ID + 902  # Verdana kopyası, kalın
+LOGO_SPRITE = 433  # ana menüdeki "BUBBLE TROUBLE" logosu
+LOGO_X, LOGO_Y, LOGO_SCALE = 167.8, 99.7, 0.95  # logonun ana menüdeki yeri (194. kare)
 TW = 20  # 1 piksel = 20 twip
 
 # Renkler (RGBA) — ana menüdeki kırmızı butonlar / altın çerçeve / sarı yazı
@@ -239,14 +245,42 @@ def iter_tags(d):
 
 
 def font_tags(tags):
-    def copy(src_id, new_id):
+    def copy(src_id, new_id, extra_flags=0):
         body = next(b for t, b in tags if t == 48 and struct.unpack('<H', b[:2])[0] == src_id)
-        return tag(48, struct.pack('<H', new_id) + body[2:])
-    return copy(SCYTHE_SRC, FONT_NUMBERS) + copy(VERDANA_SRC, FONT_DEVICE)
+        return tag(48, struct.pack('<HB', new_id, body[2] | extra_flags) + body[3:])
+    return (copy(SCYTHE_SRC, FONT_NUMBERS) + copy(VERDANA_SRC, FONT_DEVICE)
+            + copy(VERDANA_SRC, FONT_DEVICE_BOLD, 0x01))
 
 
-def build_tags(tags):
-    ids = iter(range(FIRST_ID, FIRST_ID + 100))
+def build_badge(ids):
+    """ "MPC EDITION" rozeti: menü butonları gibi kırmızı zemin, altın çerçeve, sarı yazı."""
+    out = bytearray()
+    w, h = 190, 28
+    shape, lbl, spr = next(ids), next(ids), next(ids)
+    out += rounded_rect_shape(shape, w, h, BTN_FILL, GOLD, 3, 10)
+    out += edit_text(lbl, w, 26, 'MPC EDITION', FONT_DEVICE_BOLD, 19, YELLOW, False)
+    body = place(1, shape, 0, 0) + place(2, lbl, 0, 1) + tag(1, b'') + tag(0, b'')
+    out += tag(39, struct.pack('<HH', spr, 1) + body)
+    return bytes(out), spr, w
+
+
+def add_to_logo(sprite_body, badge, badge_w):
+    """Logo sprite'ının ilk karesine rozeti ekler (logonun yazısının hemen altına, ortalı)."""
+    # Ekranda: "TROUBLE" yazısının ortası x~185, altı y~160; menü çerçevesi y~188'de başlar.
+    # Rozet bu boşluğa yerleşir. Logo koordinatlarına çevir.
+    sx = (185 - badge_w * LOGO_SCALE / 2 - LOGO_X) / LOGO_SCALE
+    sy = (160 - LOGO_Y) / LOGO_SCALE
+    out = bytearray(sprite_body[:4])
+    added = False
+    for t, b in iter_tags(sprite_body[4:]):
+        if t == 1 and not added:
+            out += place(50, badge, round(sx), round(sy))
+            added = True
+        out += tag(t, b)
+    return bytes(out)
+
+
+def build_tags(tags, ids):
     out = bytearray(font_tags(tags))
     sprite = bytearray()
 
@@ -309,7 +343,15 @@ def main(src, dst):
     hdr_len = (5 + 4 * nb + 7) // 8 + 4
     # Yeni tanımlar en başa (1. kareden önce) eklenir, böylece her yerden kullanılabilir.
     tags = list(iter_tags(body[hdr_len:]))
-    new = body[:hdr_len] + build_tags(tags) + body[hdr_len:]
+    ids = iter(range(FIRST_ID, FIRST_ID + 100))
+    defs = build_tags(tags, ids)
+    badge_tags, badge, badge_w = build_badge(ids)
+    rest = bytearray()
+    for t, b in tags:
+        if t == 39 and struct.unpack('<H', b[:2])[0] == LOGO_SPRITE:
+            b = add_to_logo(b, badge, badge_w)
+        rest += tag(t, b)
+    new = body[:hdr_len] + defs + badge_tags + bytes(rest)
     open(dst, 'wb').write(d[:4] + struct.pack('<I', len(new) + 8) + new)
 
 
