@@ -65,6 +65,7 @@ movieclip.prototype.inicijaliziraj_stazu = function()
 };
 movieclip.prototype.staza_tece = function()
 {
+   ozellik_tuslari();
    if(_root.mis.kontura and _root._ymouse >= 380)
    {
       Mouse.show();
@@ -243,8 +244,14 @@ movieclip.prototype.srusi_barijeru = function(barijera)
 };
 movieclip.prototype.pocistisve = function()
 {
-   _root.cvrsto.shot1.removeMovieClip();
-   _root.cvrsto.shot2.removeMovieClip();
+   // MOD: sınırsız atış - bölüm başında bütün atışları temizle
+   for(var ad in _root.cvrsto)
+   {
+      if(_root.cvrsto[ad].sahip)
+      {
+         _root.cvrsto[ad].removeMovieClip();
+      }
+   }
    _root.somazgoon = 1;
    _root.ubojica.removeMovieClip();
    _root.smrtdolazi.removeMovieClip();

@@ -31,8 +31,9 @@ movieclip.prototype.raspolovi = function(cestmoi, opt)
       level = 0;
    }
    tkosam++;
-   _root.cvrsto["shot" + cestmoi].pop.stop();
-   _root.cvrsto["shot" + cestmoi].gotoAndPlay("kreni");
+   // MOD: sınırsız atış - cestmoi artık atışın tam adı ("shot1_17" gibi)
+   _root.cvrsto[cestmoi].pop.stop();
+   _root.cvrsto[cestmoi].gotoAndPlay("kreni");
    if(88 < _xscale and opt != "roof")
    {
       _xscale = 80;
@@ -137,20 +138,15 @@ movieclip.prototype.bauns = function()
 {
    // MOD: toplar oyuncuya zarar vermez, içinden geçip yoluna devam eder
    // (eskiden: oyuncuya değince smrt(1) / smrt(2), kalkan varsa kalkan gider)
-   if(_root.cvrsto.shot1)
+   // MOD: sınırsız atış - ekrandaki bütün atışlara bak
+   for(var ad in _root.cvrsto)
    {
-      if(this.hitTest(_root.cvrsto.shot1))
+      var at = _root.cvrsto[ad];
+      if(at.sahip and this.hitTest(at))
       {
-         _root.bodovi1 += Math.round(1000 / _xscale);
-         raspolovi(1);
-      }
-   }
-   if(_root.cvrsto.shot2)
-   {
-      if(this.hitTest(_root.cvrsto.shot2))
-      {
-         _root.bodovi2 += Math.round(1000 / _xscale);
-         raspolovi(2);
+         _root["bodovi" + at.sahip] += Math.round(1000 / _xscale);
+         raspolovi(ad);
+         return 0;
       }
    }
    if(this.hitTest(_root.strop1))

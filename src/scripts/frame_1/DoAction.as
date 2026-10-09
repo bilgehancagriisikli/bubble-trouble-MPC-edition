@@ -69,3 +69,63 @@ movieclip.prototype.izbor = function(n)
    // en sonda: buton bu klibin içinde, silindikten sonra kod çalışmaya devam etmeyebilir
    _root.izbornik.removeMovieClip();
 };
+// MOD: özel atış penceresi
+// 1-4 tuşları (üst sıra veya numpad) özel atışı seçer; seçince yarı saydam bir pencere
+// açılır ve birkaç saniye sonra kaybolur. Pencere: tools/inject_ui.py ("ozellikler").
+_root.ozelliktuslari = new Array(49,50,51,52);
+_root.ozelliksilah = new Array(1,3,2,0);
+_root.atisaralik = 120;
+movieclip.prototype.ozellik_tuslari = function()
+{
+   var basili = 0;
+   var k = 0;
+   while(k < 4)
+   {
+      if(Key.isDown(_root.ozelliktuslari[k]) or Key.isDown(97 + k))
+      {
+         basili = k + 1;
+      }
+      k++;
+   }
+   if(basili and basili != _root.ozelliktus and _root.somazgoon)
+   {
+      ozellik_sec(basili - 1);
+   }
+   _root.ozelliktus = basili;
+   if(_root.ozellikpencere)
+   {
+      if(getTimer() - _root.ozelliksure > 2500)
+      {
+         _root.ozellikpencere._alpha -= 2;
+         if(_root.ozellikpencere._alpha <= 0)
+         {
+            _root.ozellikpencere.removeMovieClip();
+         }
+      }
+   }
+};
+movieclip.prototype.ozellik_sec = function(k)
+{
+   _root.secilisilah = _root.ozelliksilah[k];
+   var p = 1;
+   while(p <= 2)
+   {
+      _root["player" + p].vrstapucanja = _root.pucanjvrsta[_root.secilisilah];
+      if(_root.secilisilah == 2)
+      {
+         _root["mina" + p + "spreman"] = "da";
+      }
+      p++;
+   }
+   if(!_root.ozellikpencere)
+   {
+      _root.attachMovie("ozellikler","ozellikpencere",61000);
+      _root.ozellikpencere._x = 225;
+      _root.ozellikpencere._y = 40;
+   }
+   _root.ozellikpencere._alpha = 90;
+   // satırlar 44. pikselden başlar, 30 piksel aralıklı (tools/inject_ui.py build_window)
+   _root.ozellikpencere.secim._y = 44 + k * 30;
+   _root.ozelliksure = getTimer();
+   _root.ozvuci("option");
+};

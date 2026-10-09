@@ -6,7 +6,7 @@ Flash oyunu *Bubble Trouble* (SWF v5, ActionScript 1) üzerine mod çalışması
 - `original/bubble_trouble.swf` — dokunulmamış orijinal oyun
 - `src/scripts/` — JPEXS FFDec ile çıkarılmış ActionScript kodları (modlar burada yapılır)
 - `tools/build.sh` — seviye seçme ekranını ekler, `src/` içindeki scriptleri orijinal SWF'e gömüp `build/bubble_trouble_mpc.swf` üretir
-- `tools/inject_ui.py` — seviye seçme ekranını ve "MPC EDITION" yazısını SWF'e yeni karakterler olarak ekler
+- `tools/inject_ui.py` — seviye seçme ekranını, "MPC EDITION" yazısını ve özel atış penceresini SWF'e yeni karakterler olarak ekler
 - `tools/decompile.sh` — scriptleri orijinalden yeniden çıkarır
 - `tools/setup.sh` — FFDec'i indirir (Java gerekir)
 
@@ -19,6 +19,13 @@ Değişken isimleri Hırvatça: `lives` = can, `brzinaigraca` = oyuncu hızı, `
 `pucanjvrsta` = silah türleri, `vrijemestaze` = bölüm süresi, `loptica` = top, `razina` = seviye.
 
 ## Modlar
+- **Özel atış penceresi** — oyun sırasında **1** dikenli atış (tavana yapışan kanca), **2** lazer, **3** mayın,
+  **4** normal atış. Tuşa basınca yarı saydam bir pencere açılır, seçili satır vurgulanır, ~2,5 sn sonra
+  solarak kaybolur. Seçim iki oyuncuya da uygulanır ve bölümler/ölümler arasında kalır.
+  Pencere: `tools/inject_ui.py` (`build_window`); mantık: `src/scripts/frame_1/DoAction.as` (`ozellik_tuslari`, `ozellik_sec`).
+- **Sınırsız atış** — ekranda aynı anda istediğin kadar atış olabilir; ateş tuşu basılı tutulunca
+  120 ms'de bir atış yapılır (`_root.atisaralik`). `initshot`/`yeniatis` (`frame_254/DoAction_4.as`),
+  toplara çarpma `bauns` (`frame_254/DoAction_6.as`).
 - **"MPC EDITION" yazısı** — ana menüde logonun altında (`tools/inject_ui.py`, logo sprite'ı 433'e eklenir).
 - **Sonsuz can** — can hiç azalmaz (`// MOD: sonsuz can` satırları).
 - **Sonsuz süre** — süre çubuğu hep dolu kalır (`staza_tece`, `frame_254/DoAction_3.as`).

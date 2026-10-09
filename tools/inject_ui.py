@@ -179,13 +179,13 @@ def rounded_rect_shape(cid, w_px, h_px, fill, line=None, line_px=0, radius_px=0)
     return tag(32, body + bw.bytes())
 
 
-def edit_text(cid, w_px, h_px, text, font, size_px, color, outlines):
+def edit_text(cid, w_px, h_px, text, font, size_px, color, outlines, align=2, margin_px=0):
     body = struct.pack('<H', cid) + rect(0, w_px * TW, 0, h_px * TW)
     flags1 = 0x80 | 0x08 | 0x04 | 0x01  # HasText, ReadOnly, HasTextColor, HasFont
     flags2 = 0x20 | 0x10 | (0x01 if outlines else 0)  # HasLayout, NoSelect, UseOutlines
     body += bytes([flags1, flags2])
     body += struct.pack('<HH', font, size_px * TW) + rgba(color)
-    body += bytes([2]) + struct.pack('<HHHh', 0, 0, 0, 0)  # ortala
+    body += bytes([align]) + struct.pack('<HHHh', margin_px * TW, 0, 0, 0)  # 0 sol, 2 orta
     body += string('') + string(text)
     return tag(37, body)
 
@@ -224,8 +224,11 @@ def button(cid, up, over, down, label, label_x, label_y, on_release):
     return tag(34, body)
 
 
-def place(depth, char, x, y):
-    body = bytes([0x06]) + struct.pack('<HH', depth, char) + matrix(x * TW, y * TW)
+def place(depth, char, x, y, name=None):
+    flags = 0x06 | (0x20 if name else 0)
+    body = bytes([flags]) + struct.pack('<HH', depth, char) + matrix(x * TW, y * TW)
+    if name:
+        body += string(name)
     return tag(26, body)
 
 
@@ -262,6 +265,45 @@ def build_badge(ids):
     body = place(1, shape, 0, 0) + place(2, lbl, 0, 1) + tag(1, b'') + tag(0, b'')
     out += tag(39, struct.pack('<HH', spr, 1) + body)
     return bytes(out), spr, w
+
+
+OZELLIKLER = [  # (tuş, yazı) - sıra src/scripts/frame_1/DoAction.as'teki _root.ozelliksilah ile aynı
+    ('1', 'SPIKED SHOT'),
+    ('2', 'LASER'),
+    ('3', 'MINE'),
+    ('4', 'NORMAL SHOT'),
+]
+WIN_FILL = (40, 10, 4, 150)  # yarı saydam koyu zemin
+HILITE = (230, 184, 74, 110)  # seçili satır vurgusu
+
+
+def build_window(ids):
+    """Oyun sırasında 1-4 tuşlarıyla açılan yarı saydam özel atış penceresi ("ozellikler").
+
+    Seçili satırın vurgusu "secim" adlı örnek; ActionScript onu satırın y'sine taşır
+    (44 + satır * 30 — buradaki top/row_h ile aynı olmalı).
+    """
+    out = bytearray()
+    w, row_h, top = 250, 30, 44
+    h = top + row_h * len(OZELLIKLER) + 12
+    panel, hl, title, spr = next(ids), next(ids), next(ids), next(ids)
+    out += rounded_rect_shape(panel, w, h, WIN_FILL, GOLD, 2, 10)
+    out += rounded_rect_shape(hl, w - 16, row_h - 2, HILITE, None, 0, 6)
+    out += edit_text(title, w, 30, 'SPECIAL SHOTS', FONT_DEVICE_BOLD, 20, YELLOW, False)
+    body = place(1, panel, 0, 0) + place(2, title, 0, 8)
+    # Adla erişilebilmesi için vurgu şekli bir sprite içinde (çıplak şekillere adla ulaşılamaz)
+    hl_spr = next(ids)
+    out += tag(39, struct.pack('<HH', hl_spr, 1) + place(1, hl, 0, 0) + tag(1, b'') + tag(0, b''))
+    body += place(3, hl_spr, 8, top, 'secim')
+    for i, (key, label) in enumerate(OZELLIKLER):
+        y = top + i * row_h
+        lbl = next(ids)
+        out += edit_text(lbl, w - 16, row_h, key + '   ' + label, FONT_DEVICE, 18, YELLOW, False, align=0, margin_px=12)
+        body += place(10 + i, lbl, 8, y + 2)
+    body += tag(1, b'') + tag(0, b'')
+    out += tag(39, struct.pack('<HH', spr, 1) + body)
+    out += tag(56, struct.pack('<HH', 1, spr) + string('ozellikler'))
+    return bytes(out)
 
 
 def add_to_logo(sprite_body, badge, badge_w):
@@ -346,6 +388,7 @@ def main(src, dst):
     ids = iter(range(FIRST_ID, FIRST_ID + 100))
     defs = build_tags(tags, ids)
     badge_tags, badge, badge_w = build_badge(ids)
+    badge_tags += build_window(ids)
     rest = bytearray()
     for t, b in tags:
         if t == 39 and struct.unpack('<H', b[:2])[0] == LOGO_SPRITE:
