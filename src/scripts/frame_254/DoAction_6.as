@@ -177,40 +177,31 @@ movieclip.prototype.bauns = function()
          raspolovi(2);
       }
    }
-   if(this.hitTest(_root.strop1))
+   // MOD: dikenler zararsız - top tavana değince patlamaz, aşağı seker
+   // (eskiden: puan + raspolovi(0,"roof"))
+   if(this.hitTest(_root.strop1) and brzinay < 0)
    {
-      if(_root.brigraca == 1 or _root.brigraca == 2)
-      {
-         _root.bodovi1 += Math.round(1000 / _xscale);
-      }
-      if(_root.brigraca == 2 or _root.brigraca == 3)
-      {
-         _root.bodovi2 += Math.round(1000 / _xscale);
-      }
-      raspolovi(0,"roof");
+      brzinay *= -1;
    }
-   else
+   novix = _root.rate * brzinax * 70;
+   if(_root.desnirub[level] - _xscale / 2 < _X - novix)
    {
-      novix = _root.rate * brzinax * 70;
-      if(_root.desnirub[level] - _xscale / 2 < _X - novix)
-      {
-         brzinax *= -1;
-         novix -= _X + novix + _xscale / 2 - _root.desnirub[level];
-      }
-      if(_X - novix - _xscale / 2 < _root.ljevirub[level])
-      {
-         brzinax *= -1;
-         novix += novix - _X + _xscale / 2 + _root.ljevirub[level];
-      }
-      _X = _X - novix;
-      brzinay += _root.gravitacija * _root.rate * 85;
-      noviy += brzinay * _root.rate * 85;
-      if(_root.pod < _Y + _xscale / 2)
-      {
-         noviy = _root.pod - starty - _xscale / 2;
-         brzinay = maxbrzinay;
-         brzinay *= -1;
-      }
-      _Y = noviy + starty;
+      brzinax *= -1;
+      novix -= _X + novix + _xscale / 2 - _root.desnirub[level];
    }
+   if(_X - novix - _xscale / 2 < _root.ljevirub[level])
+   {
+      brzinax *= -1;
+      novix += novix - _X + _xscale / 2 + _root.ljevirub[level];
+   }
+   _X = _X - novix;
+   brzinay += _root.gravitacija * _root.rate * 85;
+   noviy += brzinay * _root.rate * 85;
+   if(_root.pod < _Y + _xscale / 2)
+   {
+      noviy = _root.pod - starty - _xscale / 2;
+      brzinay = maxbrzinay;
+      brzinay *= -1;
+   }
+   _Y = noviy + starty;
 };

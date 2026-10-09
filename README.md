@@ -20,6 +20,10 @@ Değişken isimleri Hırvatça: `lives` = can, `brzinaigraca` = oyuncu hızı, `
 
 ## Modlar
 - **Sonsuz can** — can hiç azalmaz (`// MOD: sonsuz can` satırları).
+- **Sonsuz süre** — süre çubuğu hep dolu kalır (`staza_tece`, `frame_254/DoAction_3.as`).
+- **Tavanı durdurma** — inen tavanlı bölümde (6. seviye) **S** tuşu tavanı durdurur / tekrar başlatır (`spustistrop`).
+- **Zararsız dikenler** — tavan oyuncuyu ezmez, oyuncunun başının üstünde durur; toplar dikenlere değince
+  patlamaz, aşağı seker (`bauns`, `frame_254/DoAction_6.as`).
 - **Seviye seçme ekranı** — 1 PLAYER / 2 PLAYERS'a basınca 17 seviyeden biri seçilir.
   - Ekran: `tools/inject_levelselect.py` ("izbornik" sprite'ı)
   - Mantık: `src/scripts/frame_1/DoAction.as` (`izborrazine`, `izbor`)

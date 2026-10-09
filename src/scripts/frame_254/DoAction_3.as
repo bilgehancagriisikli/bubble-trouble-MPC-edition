@@ -9,20 +9,38 @@ movieclip.prototype.smrtodstropa = function(acija)
 };
 movieclip.prototype.spustistrop = function(strop, ubrzanje)
 {
+   // MOD: S tuşu tavanı durdurur / tekrar başlatır
+   if(Key.isDown(83))
+   {
+      if(!_root.stroptus)
+      {
+         _root.stroptus = 1;
+         _root.stropdurdu = !_root.stropdurdu;
+      }
+   }
+   else
+   {
+      _root.stroptus = 0;
+   }
+   if(_root.stropdurdu)
+   {
+      return undefined;
+   }
+   // MOD: dikenler zararsız olduğu için tavan oyuncunun başının hemen üstünde durur
+   // (eskiden zemini geçip ekrandan çıkana kadar inerdi)
+   if(_root["strop" + strop].getBounds(_root).yMax >= _root.pod - _root.visinaigraca - 4)
+   {
+      return undefined;
+   }
    if(_root.somazgoon and _root["strop" + strop]._y < _root.pod + 250)
    {
       if(_root["strop" + strop]._y >= _root.pod - 120)
       {
          ubrzanje = 35;
       }
-      if(_root.player1.hitTest(this) == true)
-      {
-         smrtodstropa(1);
-      }
-      if(_root.player1.hitTest(this) == true)
-      {
-         smrtodstropa(2);
-      }
+      // MOD: dikenler zararsız - tavan oyuncuyu ezmez
+      // if(_root.player1.hitTest(this) == true) { smrtodstropa(1); }
+      // if(_root.player1.hitTest(this) == true) { smrtodstropa(2); }
       if(_root.brigraca == 1 or _root.brigraca == 3)
       {
          padstropa = _root.rate * 5 * ubrzanje;
@@ -57,6 +75,8 @@ movieclip.prototype.staza_tece = function()
    }
    if(_root.somazgoon)
    {
+      // MOD: sonsuz süre - sayaç her karede sıfırlanır, süre çubuğu hep dolu kalır
+      _root.pocetakstaze = getTimer();
       _root.proslovrijeme = getTimer();
       if(_root.proslovrijeme - _root.pocetakstaze >= _root.vrijemestaze)
       {
