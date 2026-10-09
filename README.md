@@ -20,7 +20,7 @@ Değişken isimleri Hırvatça: `lives` = can, `brzinaigraca` = oyuncu hızı, `
 
 ## Modlar
 - **Özel atış penceresi** — oyun sırasında **1** normal atış, **2** dikenli atış (tavana yapışan kanca),
-  **3** lazer, **4** mayın. Tuşa basınca yarı saydam bir pencere açılır, seçili satır vurgulanır, ~2,5 sn sonra
+  **3** lazer, **4** mayın, **5** çift atış (yeni: iki normal zıpkın yan yana; oyunun orijinalinde yok). Tuşa basınca yarı saydam bir pencere açılır, seçili satır vurgulanır, ~2,5 sn sonra
   solarak kaybolur. Seçim iki oyuncuya da uygulanır ve bölümler/ölümler arasında kalır.
   Pencere: `tools/inject_ui.py` (`build_window`); mantık: `src/scripts/frame_1/DoAction.as` (`ozellik_tuslari`, `ozellik_sec`).
 - **Sınırsız atış** — ekranda aynı anda istediğin kadar atış olabilir; ateş tuşu basılı tutulunca

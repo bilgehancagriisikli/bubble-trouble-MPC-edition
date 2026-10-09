@@ -272,6 +272,7 @@ OZELLIKLER = [  # (tuş, yazı) - sıra src/scripts/frame_1/DoAction.as'teki _ro
     ('2', 'SPIKED SHOT'),
     ('3', 'LASER'),
     ('4', 'MINE'),
+    ('5', 'DOUBLE SHOT'),
 ]
 WIN_FILL = (40, 10, 4, 150)  # yarı saydam koyu zemin
 HILITE = (230, 184, 74, 110)  # seçili satır vurgusu

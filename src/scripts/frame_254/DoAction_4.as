@@ -123,7 +123,7 @@ movieclip.prototype.initshot = function(koji)
    {
       return undefined;
    }
-   if(vrstapucanja == _root.pucanjvrsta[0] or vrstapucanja == _root.pucanjvrsta[1] or vrstapucanja == _root.pucanjvrsta[3])
+   if(vrstapucanja == _root.pucanjvrsta[0] or vrstapucanja == _root.pucanjvrsta[1] or vrstapucanja == _root.pucanjvrsta[3] or vrstapucanja == _root.pucanjvrsta[4])
    {
       if(_root.cvrsto2["mina" + koji] and 65 >= _root.cvrsto2["mina" + koji].majn._currentframe)
       {
@@ -131,7 +131,16 @@ movieclip.prototype.initshot = function(koji)
          _root.cvrsto2["mina" + koji].majn.gotoAndPlay("nestani");
       }
       motion = "stojim";
-      yeniatis(koji,vrstapucanja,_X,_Y);
+      if(vrstapucanja == _root.pucanjvrsta[4])
+      {
+         // MOD: çift atış - iki normal zıpkın, oyuncunun iki yanından
+         yeniatis(koji,_root.pucanjvrsta[0],_X - 12,_Y);
+         yeniatis(koji,_root.pucanjvrsta[0],_X + 12,_Y);
+      }
+      else
+      {
+         yeniatis(koji,vrstapucanja,_X,_Y);
+      }
    }
    if(vrstapucanja == _root.pucanjvrsta[2] and !_root.cvrsto2["mina" + koji])
    {
