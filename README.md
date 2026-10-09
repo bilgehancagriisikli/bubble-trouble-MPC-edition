@@ -19,6 +19,9 @@ Değişken isimleri Hırvatça: `lives` = can, `brzinaigraca` = oyuncu hızı, `
 `pucanjvrsta` = silah türleri, `vrijemestaze` = bölüm süresi, `loptica` = top, `razina` = seviye.
 
 ## Modlar
+- **Ana menüde QUIT** — orijinalde tıklama eylemi yoktu (sadece şeytan sırıtıyordu). Artık `fscommand("quit")`
+  gönderir: Ruffle masaüstü programı ve Flash Player projektörü kapanır; tarayıcıda sekme kapatılamaz.
+  (`tools/inject_ui.py`, `QUIT_BUTTON`)
 - **Özel atış penceresi** — oyun sırasında **1** normal atış, **2** dikenli atış (tavana yapışan kanca),
   **3** lazer, **4** mayın, **5** çift atış (yeni: iki normal zıpkın yan yana; oyunun orijinalinde yok). Tuşa basınca yarı saydam bir pencere açılır, seçili satır vurgulanır, ~2,5 sn sonra
   solarak kaybolur. Seçim iki oyuncuya da uygulanır ve bölümler/ölümler arasında kalır.

@@ -307,6 +307,34 @@ def build_window(ids):
     return bytes(out)
 
 
+QUIT_BUTTON = 452  # ana menüdeki QUIT butonu: orijinalde sadece rollOver/rollOut vardı, tıklama hiçbir şey yapmıyordu
+
+
+def fscommand(cmd, arg=''):
+    """fscommand(cmd, arg): ActionGetURL "FSCommand:cmd" """
+    data = string('FSCommand:' + cmd) + string(arg)
+    return b'\x83' + struct.pack('<H', len(data)) + data
+
+
+def add_release_action(button_body, actions):
+    """DefineButton2'ye on(release) koşullu eylemi ekler (mevcut eylemler korunur)."""
+    cid, flags, action_offset = struct.unpack('<HBH', button_body[:5])
+    new_cond = bytes([0x08, 0x00]) + actions + b'\x00'  # on(release)
+    if action_offset == 0:
+        # hiç eylem yoksa: kayıtlardan sonra ekle
+        return button_body[:3] + struct.pack('<H', len(button_body) - 3) + button_body[5:] + struct.pack('<H', 0) + new_cond
+    out = bytearray(button_body)
+    p = 3 + action_offset
+    while True:
+        size = struct.unpack('<H', out[p:p + 2])[0]
+        if size == 0:
+            # son kayıt: boyutunu yaz, yenisini sona ekle
+            out[p:p + 2] = struct.pack('<H', len(out) - p)
+            break
+        p += size
+    return bytes(out) + struct.pack('<H', 0) + new_cond
+
+
 def add_to_logo(sprite_body, badge, badge_w):
     """Logo sprite'ının ilk karesine rozeti ekler (logonun yazısının hemen altına, ortalı)."""
     # Ekranda: "TROUBLE" yazısının ortası x~185, altı y~160; menü çerçevesi y~188'de başlar.
@@ -394,6 +422,9 @@ def main(src, dst):
     for t, b in tags:
         if t == 39 and struct.unpack('<H', b[:2])[0] == LOGO_SPRITE:
             b = add_to_logo(b, badge, badge_w)
+        if t == 34 and struct.unpack('<H', b[:2])[0] == QUIT_BUTTON:
+            # QUIT: menü sesi + fscommand("quit") (Flash Player projektörü / Ruffle masaüstü programı kapatır)
+            b = add_release_action(b, call('ozvuci', 'option') + fscommand('quit'))
         rest += tag(t, b)
     new = body[:hdr_len] + defs + badge_tags + bytes(rest)
     open(dst, 'wb').write(d[:4] + struct.pack('<I', len(new) + 8) + new)
