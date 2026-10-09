@@ -12,6 +12,7 @@ onClipEvent(enterFrame){
    }
    if(_root.pucanjpauza[1] < nowtime1 - starttime1 and testirajuvjet and _root.somazgoon)
    {
-      gotoAndPlay("../:kreni");
+      // MOD: "../:kreni" yolu yeni atış adlarıyla (shot1_5 gibi) çalışmıyordu
+      _parent.gotoAndPlay("kreni");
    }
 }

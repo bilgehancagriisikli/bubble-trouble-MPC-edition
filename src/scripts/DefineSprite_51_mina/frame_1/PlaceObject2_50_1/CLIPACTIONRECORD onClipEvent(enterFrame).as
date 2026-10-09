@@ -5,6 +5,7 @@ onClipEvent(enterFrame){
    }
    if(this.hitTest(_root.strop1))
    {
-      gotoAndPlay("../:kreni");
+      // MOD: "../:kreni" yolu yeni atış adlarıyla (shot1_5 gibi) çalışmıyordu
+      _parent.gotoAndPlay("kreni");
    }
 }
