@@ -47,3 +47,24 @@ movieclip.prototype.ozvuci = function(zound)
       pop.start();
    }
 };
+// MOD: seviye seçme ekranı
+// Ekranın kendisi (butonlar, yazılar) tools/inject_levelselect.py ile SWF'e
+// "izbornik" adlı sprite olarak eklenir; butonlar izbor(N) çağırır, geri butonu izbor(0).
+movieclip.prototype.izborrazine = function()
+{
+   _root.attachMovie("izbornik","izbornik",60000);
+};
+movieclip.prototype.izbor = function(n)
+{
+   _root.ozvuci("option");
+   _root.izbornik.removeMovieClip();
+   if(n > 0)
+   {
+      _root.secilenrazina = n;
+      _root.gotoAndPlay("igra");
+   }
+   else
+   {
+      _root.meniji1 = "ok";
+   }
+};
