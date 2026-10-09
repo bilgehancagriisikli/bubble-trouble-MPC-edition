@@ -2,9 +2,9 @@ onClipEvent(enterFrame){
    krajpauze = getTimer();
    if(0 >= _root.timeleft._xscale and 1500 < krajpauze - pocetakpauze)
    {
-      _root.somazgoon = 1;
-      _root.razina = _root.razina + 1;
-      _root.gotoAndStop("razina" + _root.razina);
+      // MOD: sonraki bölüme geçmek yerine seviye seçme ekranını aç
+      // (eskiden: somazgoon = 1; razina++; gotoAndStop("razina" + razina))
+      _root.izborrazine_oyunda();
       removeMovieClip("../");
    }
 }

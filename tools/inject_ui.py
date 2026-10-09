@@ -268,10 +268,10 @@ def build_badge(ids):
 
 
 OZELLIKLER = [  # (tuş, yazı) - sıra src/scripts/frame_1/DoAction.as'teki _root.ozelliksilah ile aynı
-    ('1', 'SPIKED SHOT'),
-    ('2', 'LASER'),
-    ('3', 'MINE'),
-    ('4', 'NORMAL SHOT'),
+    ('1', 'NORMAL SHOT'),
+    ('2', 'SPIKED SHOT'),
+    ('3', 'LASER'),
+    ('4', 'MINE'),
 ]
 WIN_FILL = (40, 10, 4, 150)  # yarı saydam koyu zemin
 HILITE = (230, 184, 74, 110)  # seçili satır vurgusu

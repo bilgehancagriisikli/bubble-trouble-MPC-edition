@@ -19,8 +19,8 @@ Değişken isimleri Hırvatça: `lives` = can, `brzinaigraca` = oyuncu hızı, `
 `pucanjvrsta` = silah türleri, `vrijemestaze` = bölüm süresi, `loptica` = top, `razina` = seviye.
 
 ## Modlar
-- **Özel atış penceresi** — oyun sırasında **1** dikenli atış (tavana yapışan kanca), **2** lazer, **3** mayın,
-  **4** normal atış. Tuşa basınca yarı saydam bir pencere açılır, seçili satır vurgulanır, ~2,5 sn sonra
+- **Özel atış penceresi** — oyun sırasında **1** normal atış, **2** dikenli atış (tavana yapışan kanca),
+  **3** lazer, **4** mayın. Tuşa basınca yarı saydam bir pencere açılır, seçili satır vurgulanır, ~2,5 sn sonra
   solarak kaybolur. Seçim iki oyuncuya da uygulanır ve bölümler/ölümler arasında kalır.
   Pencere: `tools/inject_ui.py` (`build_window`); mantık: `src/scripts/frame_1/DoAction.as` (`ozellik_tuslari`, `ozellik_sec`).
 - **Sınırsız atış** — ekranda aynı anda istediğin kadar atış olabilir; ateş tuşu basılı tutulunca
@@ -33,7 +33,9 @@ Değişken isimleri Hırvatça: `lives` = can, `brzinaigraca` = oyuncu hızı, `
 - **Zararsız tavan** — tavan oyuncuyu ezmez, oyuncunun başının üstünde durur; topları eskisi gibi patlatır.
 - **Toplar oyuncunun içinden geçer** — top oyuncuya değince öldürmez, yoluna devam eder
   (`bauns`, `frame_254/DoAction_6.as`).
-- **Seviye seçme ekranı** — 1 PLAYER / 2 PLAYERS'a basınca 17 seviyeden biri seçilir.
+- **Seviye seçme ekranı** — 1 PLAYER / 2 PLAYERS'a basınca ve her bölüm bittiğinde 17 seviyeden biri seçilir.
+  Bölüm sonunda BACK ana menüye döner.
+  - Bölüm sonu: `src/scripts/DefineSprite_71_gotov` → `izborrazine_oyunda`
   - Ekran: `tools/inject_ui.py` ("izbornik" sprite'ı)
   - Mantık: `src/scripts/frame_1/DoAction.as` (`izborrazine`, `izbor`)
   - Menü butonları: `src/scripts/DefineButton2_446`, `DefineButton2_448`

@@ -57,7 +57,29 @@ movieclip.prototype.izborrazine = function()
 movieclip.prototype.izbor = function(n)
 {
    _root.ozvuci("option");
-   if(n > 0)
+   if(_root.oyunda)
+   {
+      // bölüm sonunda açılan ekran
+      _root.oyunda = 0;
+      if(n > 0)
+      {
+         _root.somazgoon = 1;
+         _root.razina = n;
+         _root.gotoAndStop("razina" + n);
+         if(_root.mis.kontura)
+         {
+            Mouse.hide();
+         }
+      }
+      else
+      {
+         // GERİ: ana menüye dön (oyundaki "quit?" butonu gibi)
+         stopAllSounds();
+         _root.gotoAndPlay("welcome");
+         _root.kill();
+      }
+   }
+   else if(n > 0)
    {
       _root.secilenrazina = n;
       _root.gotoAndPlay("igra");
@@ -69,11 +91,21 @@ movieclip.prototype.izbor = function(n)
    // en sonda: buton bu klibin içinde, silindikten sonra kod çalışmaya devam etmeyebilir
    _root.izbornik.removeMovieClip();
 };
+// MOD: her bölüm bitince seviye seçme ekranı açılır (DefineSprite_71_gotov)
+movieclip.prototype.izborrazine_oyunda = function()
+{
+   _root.oyunda = 1;
+   // bonus animasyonu (gotov_ani) normalde kare değişince kendini siler; burada kare değişmediği için elle sil
+   _root.animani.removeMovieClip();
+   Mouse.show();
+   _root.attachMovie("izbornik","izbornik",60000);
+};
 // MOD: özel atış penceresi
 // 1-4 tuşları (üst sıra veya numpad) özel atışı seçer; seçince yarı saydam bir pencere
 // açılır ve birkaç saniye sonra kaybolur. Pencere: tools/inject_ui.py ("ozellikler").
 _root.ozelliktuslari = new Array(49,50,51,52);
-_root.ozelliksilah = new Array(1,3,2,0);
+// tuş sırası -> _root.pucanjvrsta indeksi: 1 normal(0), 2 dikenli(1), 3 lazer(3), 4 mayın(2)
+_root.ozelliksilah = new Array(0,1,3,2);
 _root.atisaralik = 120;
 movieclip.prototype.ozellik_tuslari = function()
 {
