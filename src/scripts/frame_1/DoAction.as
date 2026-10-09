@@ -75,6 +75,7 @@ movieclip.prototype.izbor = function(n)
       {
          // GERİ: ana menüye dön (oyundaki "quit?" butonu gibi)
          stopAllSounds();
+         _root.oyunu_temizle();
          _root.gotoAndPlay("welcome");
          _root.kill();
       }
@@ -160,4 +161,42 @@ movieclip.prototype.ozellik_sec = function(k)
    _root.ozellikpencere.secim._y = 44 + k * 30;
    _root.ozelliksure = getTimer();
    _root.ozvuci("option");
+};
+// MOD: bölüm yarıda bırakılınca (quit?, BACK) ekranda kalan her şeyi temizle.
+// _root.kill() topları silmiyor; özellikle bitmeyen 17. bölümden çıkınca toplar menüde kalıyordu.
+movieclip.prototype.oyunu_temizle = function()
+{
+   var ad;
+   for(ad in _root)
+   {
+      if(typeof(_root[ad]) == "movieclip")
+      {
+         if(ad.substr(0,1) == "a" and !isNaN(ad.substr(1)) or ad.substr(0,8) == "rascvjet" or ad == "balls" or ad == "bonus")
+         {
+            _root[ad].removeMovieClip();
+         }
+      }
+   }
+   for(ad in _root.cvrsto)
+   {
+      if(_root.cvrsto[ad].sahip)
+      {
+         _root.cvrsto[ad].removeMovieClip();
+      }
+   }
+   for(ad in _root.mis)
+   {
+      if(ad.substr(0,6) == "oruzje")
+      {
+         _root.mis[ad].removeMovieClip();
+      }
+   }
+   _root.cvrsto2.mina1.removeMovieClip();
+   _root.cvrsto2.mina2.removeMovieClip();
+   _root.ozellikpencere.removeMovieClip();
+   _root.gotova_staza.removeMovieClip();
+   _root.animani.removeMovieClip();
+   _root.ubojica.removeMovieClip();
+   _root.smrtdolazi.removeMovieClip();
+   _root.somazgoon = 0;
 };

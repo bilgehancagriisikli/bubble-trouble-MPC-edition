@@ -65,7 +65,6 @@ movieclip.prototype.inicijaliziraj_stazu = function()
 };
 movieclip.prototype.staza_tece = function()
 {
-   ozellik_tuslari();
    if(_root.mis.kontura and _root._ymouse >= 380)
    {
       Mouse.show();

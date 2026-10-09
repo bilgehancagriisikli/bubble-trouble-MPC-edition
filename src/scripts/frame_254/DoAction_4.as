@@ -15,6 +15,12 @@ movieclip.prototype.initplyr = function(plyr)
 movieclip.prototype.move = function(player)
 {
    // MOD: sınırsız atış - atış sonrası 100 ms donma kaldırıldı (basılı ateşte oyuncu sürünüyordu)
+   // MOD: özel atış tuşları - her karede bir kez (ilk aktif oyuncu) kontrol edilir.
+   // staza_tece yerine burada, çünkü 17. bölüm staza_tece'yi çağırmıyor.
+   if(player == 1 or _root.brigraca == 3)
+   {
+      ozellik_tuslari();
+   }
    mojtrenutak = getTimer();
    if(_root.somazgoon)
    {
