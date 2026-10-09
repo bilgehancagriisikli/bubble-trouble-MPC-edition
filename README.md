@@ -23,7 +23,7 @@ Değişken isimleri Hırvatça: `lives` = can, `brzinaigraca` = oyuncu hızı, `
 - **Sonsuz süre** — süre çubuğu hep dolu kalır (`staza_tece`, `frame_254/DoAction_3.as`).
 - **Tavanı durdurma** — inen tavanlı bölümde (6. seviye) **S** tuşu tavanı durdurur / tekrar başlatır (`spustistrop`).
 - **Zararsız tavan** — tavan oyuncuyu ezmez, oyuncunun başının üstünde durur; topları eskisi gibi patlatır.
-- **Toplar oyuncudan seker** — top oyuncuya değince öldürmez, duvardan seker gibi yön değiştirir
+- **Toplar oyuncunun içinden geçer** — top oyuncuya değince öldürmez, yoluna devam eder
   (`bauns`, `frame_254/DoAction_6.as`).
 - **Seviye seçme ekranı** — 1 PLAYER / 2 PLAYERS'a basınca 17 seviyeden biri seçilir.
   - Ekran: `tools/inject_levelselect.py` ("izbornik" sprite'ı)

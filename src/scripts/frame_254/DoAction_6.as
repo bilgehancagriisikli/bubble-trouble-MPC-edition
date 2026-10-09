@@ -135,24 +135,8 @@ movieclip.prototype.initball = function(xing, ying, index, gdje, boja)
 };
 movieclip.prototype.bauns = function()
 {
-   // MOD: top oyuncuya değince öldürmez, duvardan seker gibi yatay yönü döner
-   // (brzinax > 0 sola, < 0 sağa gider; oyuncudan uzağa doğru ayarlanır)
-   var k = 1;
-   while(2 >= k)
-   {
-      if(_root["player" + k].hitTest(_X + _xscale / 2.5,_Y + _xscale / 3,true) or _root["player" + k].hitTest(_X - _xscale / 2.5,_Y + _xscale / 3,true) or _root["player" + k].hitTest(_X,_Y + _xscale / 2 - 2,true))
-      {
-         if(_X < _root["player" + k]._x)
-         {
-            brzinax = Math.abs(brzinax);
-         }
-         else
-         {
-            brzinax = - Math.abs(brzinax);
-         }
-      }
-      k++;
-   }
+   // MOD: toplar oyuncuya zarar vermez, içinden geçip yoluna devam eder
+   // (eskiden: oyuncuya değince smrt(1) / smrt(2), kalkan varsa kalkan gider)
    if(_root.cvrsto.shot1)
    {
       if(this.hitTest(_root.cvrsto.shot1))
