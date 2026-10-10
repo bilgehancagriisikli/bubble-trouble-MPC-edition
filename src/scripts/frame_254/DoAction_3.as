@@ -337,4 +337,8 @@ movieclip.prototype.defaultstaza = function()
    // 17. bölüm kendi kurulumunda (frame_397) tajmaut'u bundan sonra tekrar 12000 yapıyor.
    _root.tajmaut = 0;
    _root.kaos = 0;
+   if(!_root.mpclevel)
+   {
+      _root.mpcetiketi.removeMovieClip();
+   }
 };

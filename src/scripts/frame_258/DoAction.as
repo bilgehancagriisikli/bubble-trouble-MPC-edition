@@ -1,12 +1,13 @@
 // MOD: seviye seçme ekranında seçilen seviyeye atla
 if(_root.secilenrazina > 1)
 {
-   _root.razina = _root.secilenrazina;
+   var n = _root.secilenrazina;
    _root.secilenrazina = 0;
-   gotoAndStop("razina" + _root.razina);
+   razinaya_git(n);
 }
 else
 {
+   _root.mpclevel = 0;
    mojevrijemeje(40,25);
    pocistisve();
    defaultstaza();

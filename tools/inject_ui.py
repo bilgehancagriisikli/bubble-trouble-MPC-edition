@@ -19,6 +19,7 @@ import struct
 import sys
 
 LEVEL_COUNT = 17
+MPC_LEVEL = 18  # 17'nin yanındaki "MPC" butonu izbor(18) çağırır (src/scripts/frame_1/DoAction.as: _root.MPC_RAZINA)
 FIRST_ID = 800  # orijinal dosyada en büyük karakter ID'si 702
 SCYTHE_SRC = 589  # "Scythe": oyunun seviye numarası fontu (0-9 rakamları gömülü)
 VERDANA_SRC = 699  # "Verdana": glifsiz, sistem fontu olarak çizilir
@@ -335,6 +336,18 @@ def add_release_action(button_body, actions):
     return bytes(out) + struct.pack('<H', 0) + new_cond
 
 
+def build_mpc_label(ids):
+    """MPC bölümünde HUD'daki seviye numarasının üstünü kapatan "MPC" yazısı ("mpcetiket")."""
+    out = bytearray()
+    shape, lbl, spr = next(ids), next(ids), next(ids)
+    out += rounded_rect_shape(shape, 36, 25, (204, 204, 204, 255))  # HUD kutusunun rengi
+    out += edit_text(lbl, 36, 22, 'MPC', FONT_DEVICE_BOLD, 14, (255, 0, 0, 255), False)
+    body = place(1, shape, 0, 0) + place(2, lbl, 0, 3) + tag(1, b'') + tag(0, b'')
+    out += tag(39, struct.pack('<HH', spr, 1) + body)
+    out += tag(56, struct.pack('<HH', 1, spr) + string('mpcetiket'))
+    return bytes(out)
+
+
 def add_to_logo(sprite_body, badge, badge_w):
     """Logo sprite'ının ilk karesine rozeti ekler (logonun yazısının hemen altına, ortalı)."""
     # Ekranda: "TROUBLE" yazısının ortası x~185, altı y~160; menü çerçevesi y~188'de başlar.
@@ -386,6 +399,14 @@ def build_tags(tags, ids):
         sprite += place(depth, btn, x0 + col * (bw_ + gap), y0 + row * (bh_ + gap))
         depth += 1
 
+    # MPC bölümü butonu: 17'nin hemen yanında
+    lbl, btn = next(ids), next(ids)
+    out += edit_text(lbl, bw_, 34, 'MPC', FONT_DEVICE_BOLD, 20, YELLOW, False)
+    out += button(btn, *shapes, lbl, 0, 12, call('izbor', MPC_LEVEL))
+    col, row = (MPC_LEVEL - 1) % cols, (MPC_LEVEL - 1) // cols
+    sprite += place(depth, btn, x0 + col * (bw_ + gap), y0 + row * (bh_ + gap))
+    depth += 1
+
     # Geri butonu
     back_w, back_h = 160, 46
     back_shapes = []
@@ -418,6 +439,7 @@ def main(src, dst):
     defs = build_tags(tags, ids)
     badge_tags, badge, badge_w = build_badge(ids)
     badge_tags += build_window(ids)
+    badge_tags += build_mpc_label(ids)
     rest = bytearray()
     for t, b in tags:
         if t == 39 and struct.unpack('<H', b[:2])[0] == LOGO_SPRITE:

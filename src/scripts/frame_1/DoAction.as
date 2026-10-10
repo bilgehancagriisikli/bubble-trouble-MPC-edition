@@ -64,8 +64,7 @@ movieclip.prototype.izbor = function(n)
       if(n > 0)
       {
          _root.somazgoon = 1;
-         _root.razina = n;
-         _root.gotoAndStop("razina" + n);
+         razinaya_git(n);
          if(_root.mis.kontura)
          {
             Mouse.hide();
@@ -198,5 +197,74 @@ movieclip.prototype.oyunu_temizle = function()
    _root.animani.removeMovieClip();
    _root.ubojica.removeMovieClip();
    _root.smrtdolazi.removeMovieClip();
+   _root.mpcetiketi.removeMovieClip();
+   _root.mpclevel = 0;
    _root.somazgoon = 0;
+};
+// MOD: MPC bölümü (seviye seçme ekranında 18. buton, "MPC")
+// 17. bölümün sahnesini kullanır ama oradaki top üretimi yerine her saniye sırayla bir sağdan
+// bir soldan oyunun en büyük topunu (boyut 0) sonsuza dek gönderir. _root.mpclevel ile açılır.
+_root.MPC_RAZINA = 18;
+movieclip.prototype.razinaya_git = function(n)
+{
+   _root.razina = n;
+   if(n == _root.MPC_RAZINA)
+   {
+      _root.mpclevel = 1;
+      _root.gotoAndStop("razina17");
+   }
+   else
+   {
+      _root.mpclevel = 0;
+      _root.gotoAndStop("razina" + n);
+   }
+};
+movieclip.prototype.mpc_dongu = function()
+{
+   if(!_root.mpcetiketi)
+   {
+      // HUD'daki seviye numarasının (18) üstüne "MPC" yazısı
+      _root.attachMovie("mpcetiket","mpcetiketi",59000);
+      _root.mpcetiketi._x = 331;
+      _root.mpcetiketi._y = 420;
+   }
+   if(!_root.somazgoon)
+   {
+      return undefined;
+   }
+   if(getTimer() - _root.mpcson >= 1000)
+   {
+      _root.mpcson = getTimer();
+      if(_root.mpcyon == 1)
+      {
+         _root.mpcyon = -1;
+      }
+      else
+      {
+         _root.mpcyon = 1;
+      }
+      mpc_top(_root.mpcyon);
+   }
+};
+movieclip.prototype.mpc_top = function(yon)
+{
+   // yon 1: sağdan sola, -1: soldan sağa (initball'da brzinax > 0 sola gider)
+   // 3. bölme ekran dışına kadar uzanır; ljrb 1,5 sn sonra topu normal (0.) bölmeye alır (17. bölümdeki gibi)
+   _root.ljevirub[3] = -200;
+   _root.desnirub[3] = 900;
+   var ad = "a" + _root.attached;
+   _root.attachMovie("radilica",ad,20000 + _root.attached % 10000);
+   if(yon == 1)
+   {
+      _root[ad].akcije._x = 730;
+   }
+   else
+   {
+      _root[ad].akcije._x = -36;
+   }
+   _root[ad].akcije._y = 180;
+   _root.prizma = _root[ad].akcije;
+   _root[ad].akcije.attachMovie("ljrb","gres",22);
+   _root[ad].akcije.initball(yon,-1,0,3,random(6) + 1);
+   _root.attached = _root.attached + 1;
 };

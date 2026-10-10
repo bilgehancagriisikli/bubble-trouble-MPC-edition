@@ -19,6 +19,10 @@ Değişken isimleri Hırvatça: `lives` = can, `brzinaigraca` = oyuncu hızı, `
 `pucanjvrsta` = silah türleri, `vrijemestaze` = bölüm süresi, `loptica` = top, `razina` = seviye.
 
 ## Modlar
+- **MPC bölümü** — seviye seçme ekranında 17'nin yanındaki **MPC** butonu. 17. bölümün sahnesinde, her saniye
+  sırayla bir sağdan bir soldan oyunun en büyük topu gelir, sonsuza dek (bölüm bitmez). HUD'da seviye yerine "MPC" yazar.
+  Mantık: `src/scripts/frame_1/DoAction.as` (`razinaya_git`, `mpc_dongu`, `mpc_top`, `_root.mpclevel`);
+  17. bölümün top üreticileri `frame_398` içinde MPC'de devre dışı. Buton/etiket: `tools/inject_ui.py`.
 - **Ana menüde QUIT** — orijinalde tıklama eylemi yoktu (sadece şeytan sırıtıyordu). Artık `fscommand("quit")`
   gönderir: Ruffle masaüstü programı ve Flash Player projektörü kapanır; tarayıcıda sekme kapatılamaz.
   (`tools/inject_ui.py`, `QUIT_BUTTON`)

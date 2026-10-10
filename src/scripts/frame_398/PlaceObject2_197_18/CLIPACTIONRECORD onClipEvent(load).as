@@ -1,4 +1,8 @@
 onClipEvent(load){
    kadkazem = getTimer();
-   stancanje(1,4);
+   // MOD: MPC bölümünde 17. bölümün topları üretilmez
+   if(!_root.mpclevel)
+   {
+      stancanje(1,4);
+   }
 }
